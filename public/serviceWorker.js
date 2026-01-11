@@ -143,3 +143,39 @@ self.addEventListener('fetch', (event) => {
         caches.match(request).then(response => response || fetch(request))
     );
 });
+
+/**
+ * Push event handler
+ *
+ * Displays a notification to re-engage the user with the application.
+ */
+self.addEventListener('push', (event) => {
+    const data = event.data ? event.data.json() : {};
+
+    const title = data.title || 'Geo PWA';
+    const options = {
+        body: data.body || 'New content is available.',
+        icon: '/icons/192x192.png',
+        badge: '/icons/128x128.png',
+        data: {
+            url: data.url || '/'
+        }
+    };
+
+    event.waitUntil(
+        self.registration.showNotification(title, options)
+    );
+});
+
+/**
+ * Notification click handler
+ *
+ * Opens the application and navigates to a specific route (deep link).
+ */
+self.addEventListener('notificationclick', (event) => {
+    event.notification.close();
+
+    event.waitUntil(
+        clients.openWindow(event.notification.data.url)
+    );
+});
