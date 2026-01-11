@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import 'leaflet/dist/leaflet.css';
 
 import {
   f7,
@@ -16,14 +17,15 @@ const MyApp = () => {
 
   // Framework7 Parameters
   const f7params = {
-    name: 'GeoLocationPWA - WebEngineeringII', // App name
-      theme: 'auto', // Automatic theme detection
+    name: 'WebEngII', // App name
+      theme: 'md', // same theme on every device
+      
+      view: {
+        browserHistory: true,
+        browserHistoryRoot: '',
+        browserHistorySeparator: '',
+      },
 
-
-
-
-      // App store
-      store: store,
       // App routes
       routes: routes,
   };
