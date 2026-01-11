@@ -1,6 +1,7 @@
 import Agb from '../pages/agb.jsx';
 import HomePage from '../pages/home.jsx';
 import Impressum from '../pages/impressum.jsx';
+import About from "@/pages/about";
 
 var routes = [
   {
