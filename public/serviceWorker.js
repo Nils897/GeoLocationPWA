@@ -1,6 +1,20 @@
+/**
+ * Service Worker for Geo PWA
+ *
+ * Responsibilities:
+ * - Cache static assets for offline use
+ * - Dynamically cache assets in /assets/
+ * - Clean up old caches on activation
+ * - Serve cached assets first, fallback to network
+ * - Provide offline fallback for HTML documents
+ */
+
 const CACHE_NAME = 'geo-pwa-cache-v1';
 
-// Statische Assets, die immer verfügbar sein sollen
+/**
+ * List of static assets to cache during installation.
+ * These files are essential for the app shell and icons.
+ */
 const STATIC_ASSETS = [
     '/',
     '/index.html',
@@ -17,17 +31,22 @@ const STATIC_ASSETS = [
     '/icons/favicon.png'
 ];
 
-// Install: Cache statische Assets + alle Assets im Build-Ordner
+/**
+ * Install event
+ *
+ * Caches the static assets and dynamically caches all assets
+ * under /assets/ to ensure offline availability.
+ */
 self.addEventListener('install', (event) => {
-    console.log('Service Worker installiert');
+    console.log('Service Worker installed');
     event.waitUntil(
         (async () => {
             const cache = await caches.open(CACHE_NAME);
 
-            // statische Assets
+            // Cache static app shell assets
             await cache.addAll(STATIC_ASSETS);
 
-            // Dynamisch alle Dateien aus /assets cachen
+            // Dynamically cache all files under /assets/
             const assetsResponse = await fetch('/assets/');
             if (assetsResponse.ok) {
                 const htmlText = await assetsResponse.text();
@@ -36,31 +55,47 @@ self.addEventListener('install', (event) => {
                 await cache.addAll(assetUrls);
             }
 
+            // Force waiting Service Worker to become active immediately
             return self.skipWaiting();
         })()
     );
 });
 
-// Activate: Alten Cache löschen
+/**
+ * Activate event
+ *
+ * Deletes old caches that do not match CACHE_NAME
+ * to prevent serving outdated resources.
+ */
 self.addEventListener('activate', (event) => {
-    console.log('Service Worker aktiviert');
+    console.log('Service Worker activated');
     event.waitUntil(
         caches.keys().then((keys) =>
             Promise.all(
-                keys.filter(key => key !== CACHE_NAME)
+                keys
+                    .filter(key => key !== CACHE_NAME)
                     .map(key => caches.delete(key))
             )
         )
     );
+    // Take control of all clients immediately
     self.clients.claim();
 });
 
-// Fetch: Assets aus Cache bedienen, sonst Netzwerk
+/**
+ * Fetch event
+ *
+ * Responds with cached assets first (Cache First strategy),
+ * falls back to network if not cached.
+ *
+ * For HTML documents, provides offline fallback to /index.html
+ * if both cache and network fail.
+ */
 self.addEventListener('fetch', (event) => {
     event.respondWith(
         caches.match(event.request).then((response) => {
             return response || fetch(event.request).catch(() => {
-                // Fallback auf Startseite, falls Dokument offline nicht im Cache ist
+                // Offline fallback for HTML pages
                 if (event.request.destination === 'document') {
                     return caches.match('/index.html');
                 }
