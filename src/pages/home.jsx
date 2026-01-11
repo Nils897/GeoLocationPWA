@@ -21,7 +21,16 @@ export default function HomePage() {
         setIsSetMarkerMode(true);
     }
 
+    function deleteMarkerById(id) {
+        setMarkers(prev =>
+            prev.filter((_, index) => index !== id)
+        );
 
+        // falls der gelöschte Marker gerade ausgewählt war
+        if (selectedInfoMarker?.id === id) {
+            setSelectedInfoMarker(null);
+        }
+    }
 
     function handleMarkerAdd(newMarker) {
         if (newMarker.type === 'start') {
@@ -172,7 +181,18 @@ export default function HomePage() {
                                             key={m.id}
                                             title={`${m.convertedType}: (${m.lat.toFixed(5)}, ${m.lng.toFixed(5)})`}
                                         >
-
+                                            <Button
+                                                slot="after"
+                                                small
+                                                fill
+                                                color="red"
+                                                onClick={(e) => {
+                                                    e.stopPropagation(); // verhindert Accordion-Toggle
+                                                    deleteMarkerById(m.id);
+                                                }}
+                                            >
+                                                Löschen
+                                            </Button>
                                         </ListItem>
                                     ))}
                                 </List>
