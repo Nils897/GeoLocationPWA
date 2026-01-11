@@ -1,0 +1,51 @@
+{
+  "name": "WebEngineering II – Prüfungsaufgabe – GeoLocation PWA",
+  "short_name": "GeoPWA",
+  "lang": "de-DE",
+  "dir": "auto",
+
+  "start_url": "/index.html?source=pwa",
+  "id": "/index.html?source=pwa",
+  "scope": "/",
+
+  "display": "standalone",
+
+  "background_color": "#ffffff",
+  "theme_color": "#000000",
+
+  "description": "Progressive Web Application im Rahmen der Prüfungsaufgabe des Moduls WebEngineering II",
+
+  "icons": [
+    {
+      "src": "/icons/128x128.png",
+      "sizes": "128x128",
+      "type": "image/png"
+    },
+    {
+      "src": "/icons/144x144.png",
+      "sizes": "144x144",
+      "type": "image/png"
+    },
+    {
+      "src": "/icons/152x152.png",
+      "sizes": "152x152",
+      "type": "image/png"
+    },
+    {
+      "src": "/icons/192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icons/256x256.png",
+      "sizes": "256x256",
+      "type": "image/png"
+    },
+    {
+      "src": "/icons/512x512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
