@@ -56,3 +56,11 @@ document.addEventListener('DOMContentLoaded', () => {
 // Mount React App
 const root = createRoot(document.getElementById('app'));
 root.render(React.createElement(App));
+
+if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/serviceWorker.js')
+            .then(reg => console.log('Service Worker registriert', reg))
+            .catch(err => console.error('Service Worker Fehler', err));
+    });
+}
