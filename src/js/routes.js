@@ -1,5 +1,3 @@
-
-import HomePage from '../pages/home.jsx';
 import Agb from '../pages/agb.jsx';
 import HomePage from '../pages/home.jsx';
 import Impressum from '../pages/impressum.jsx';
